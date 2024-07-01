@@ -1,0 +1,19 @@
+# /srv/salt/cassandra/cassandra.yaml.jinja
+
+cluster_name: 'Test Cluster'
+num_tokens: 256
+
+commitlog_sync: periodic
+commitlog_sync_period_in_ms: 10000
+partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+
+seed_provider:
+    - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+      parameters:
+          - seeds: "ip_node1,ip_node2,ip_node3"
+
+listen_address: {{ grains['ipv4'][0] }}
+rpc_address: 0.0.0.0
+broadcast_rpc_address: {{ grains['ipv4'][0] }}
+
+endpoint_snitch: GossipingPropertyFileSnitch

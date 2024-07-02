@@ -39,6 +39,17 @@ sudo tee /etc/salt/master.d/thread_options.conf <<EOF
 worker_threads: 5
 EOF
 
+# Configure mine_functions
+sudo tee -a /etc/salt/master <<EOF
+mine_functions:
+  ipv4:
+    - mine_function: network.ip_addrs
+    - type: ipv4
+
+log_level: debug
+log_level_logfile: debug
+EOF
+
 # Restart and enable Salt Master service
 sudo systemctl restart salt-master
 sudo systemctl enable salt-master 

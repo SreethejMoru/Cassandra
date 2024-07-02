@@ -6,6 +6,6 @@ base:
     - cassandra.keyring
     - cassandra.sources_list
     - cassandra.install
-    - cassandra.config
+    - cassandra.cassandra
     - cassandra.cassandra_rackdc
     - cassandra.swap

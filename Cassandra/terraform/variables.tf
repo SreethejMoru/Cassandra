@@ -31,3 +31,21 @@ variable "private_key_path" {
   type        = string
   default     = "/home/sreethejmoru/Downloads/cassandra.pem"
 }
+
+variable "salt_config_dir" {
+  description = "The path to the Salt configuration directory on the local machine"
+  type        = string
+  default     = "/tmp/salt"
+}
+
+variable "salt_root_dir" {
+  description = "The path to the Salt root directory on the remote server"
+  type        = string
+  default     = "/srv/salt"
+}
+
+variable "salt_permissions" {
+  description = "The permissions to set for the Salt root directory on the remote server"
+  type        = string
+  default     = "755"
+}

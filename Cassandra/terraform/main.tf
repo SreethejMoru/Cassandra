@@ -156,16 +156,12 @@ resource "aws_instance" "salt_master" {
     }
   }
   provisioner "remote-exec" {
-    inline = [
-      "sudo chmod -R 777 /tmp/salt",
-"sudo mkdir -p /srv/salt",
-"sudo chown -R root:root /srv/salt",
-      "sudo mkdir -p /srv/salt/",
-      "sudo cp -r /tmp/salt/* /srv/salt/",
-      "sudo chmod -R 777 /srv/salt",
-      "sudo cp -r /tmp/salt/* /srv/salt/",
-      # "sudo yum -y install java"
-    ]
+  inline = [
+    "sudo mkdir -p ${var.salt_root_dir}",
+    "sudo chown -R root:root ${var.salt_root_dir}",
+    "sudo chmod -R ${var.salt_permissions} ${var.salt_root_dir}",
+    "sudo cp -r ${var.salt_config_dir}/* ${var.salt_root_dir}/"
+  ]
     connection {
       type        = "ssh"
       user        = "admin"
@@ -210,13 +206,10 @@ resource "aws_instance" "salt_minion" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod -R 777 /tmp/salt",
-"sudo mkdir -p /srv/salt",
-"sudo chown -R root:root /srv/salt",
-      "sudo mkdir -p /srv/salt/",
-      "sudo cp -r /tmp/salt/* /srv/salt/",
-      "sudo chmod -R 777 /srv/salt",
-      # "sudo yum -y install java"
+      "sudo mkdir -p ${var.salt_root_dir}",
+    "sudo chown -R root:root ${var.salt_root_dir}",
+    "sudo chmod -R ${var.salt_permissions} ${var.salt_root_dir}",
+    "sudo cp -r ${var.salt_config_dir}/* ${var.salt_root_dir}/"
     ]
     connection {
       type        = "ssh"

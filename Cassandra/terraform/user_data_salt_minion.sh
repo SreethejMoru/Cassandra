@@ -47,7 +47,11 @@ EOF
 # Configure mine_functions
 sudo tee -a /etc/salt/minion <<EOF
 mine_functions:
-  network.ip_addrs: []
+  ipv4:
+    - mine_function: network.ip_addrs
+    - type: ipv4
+log_level: debug
+log_level_logfile: debug
 EOF
 
 # Restart Salt minion to apply changes (adjust for your init system if not using systemd)

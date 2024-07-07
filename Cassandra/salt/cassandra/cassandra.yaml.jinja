@@ -21,7 +21,7 @@ ssl_storage_port: 7001
 listen_address: {{ grains['ipv4'][1] }}
 rpc_address: 0.0.0.0
 broadcast_rpc_address: {{ grains['ipv4'][1] }}
-rpc_port: 9160
+rpc_port: 9160  
 seed_provider:
     - class_name: org.apache.cassandra.locator.SimpleSeedProvider
       parameters:

@@ -209,7 +209,11 @@ resource "aws_instance" "salt_minion" {
       "sudo mkdir -p ${var.salt_root_dir}",
     "sudo chown -R root:root ${var.salt_root_dir}",
     "sudo chmod -R ${var.salt_permissions} ${var.salt_root_dir}",
-    "sudo cp -r ${var.salt_config_dir}/* ${var.salt_root_dir}/"
+    "sudo cp -r ${var.salt_config_dir}/* ${var.salt_root_dir}/",
+    "sudo apt-get update -y",
+      "sudo apt-get install -y ntp",
+      "sudo service ntp start",
+      "sudo systemctl enable ntp"
     ]
     connection {
       type        = "ssh"

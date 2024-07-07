@@ -1,0 +1,215 @@
+============================================================================================================================================
+===================================================================START=======================================================================
+===============================================================================================================================================
+sudo salt '*' state.apply zookeeper.init
+
+1.sudo nano /etc/apt/sources.list.d/corretto.list
+
+2.Add Repository Line:
+Inside the file, add the following line to specify the Corretto repository:
+   deb https://apt.corretto.aws stable main
+
+3.sudo apt update
+
+4.sudo apt install gnupg
+
+5.Add the GPG Key Using curl and gpg:  curl -L https://apt.corretto.aws/corretto.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/corretto-archive-keyring.gpg
+
+6.Add the Repository:  echo 'deb https://apt.corretto.aws stable main' | sudo tee /etc/apt/sources.list.d/corretto.list
+
+7. sudo apt update
+
+8.sudo apt install -y java-1.8.0-amazon-corretto-jdk
+
+9.java -version
+
+10.echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto' >> ~/.bashrc
+11.echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
+12.source ~/.bashrc
+
+
+Add the Apache Cassandra repository keys:
+
+13.------------sudo curl -o /etc/apt/keyrings/apache-cassandra.asc https://downloads.apache.org/cassandra/KEYS
+
+Add the Apache repository of Cassandra to /etc/apt/sources.list.d/cassandra.sources.list, for example for the latest 4.1
+
+14.------------ echo "deb [signed-by=/etc/apt/keyrings/apache-cassandra.asc] https://debian.cassandra.apache.org 41x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+
+15.sudo apt-get update
+
+16. sudo apt-get install cassandra
+
+17.sudo service cassandra start
+18.sudo service cassandra status
+
+19. nodetool status
+
+20.cqlsh
+
+OOM killer errors
+
+Step-by-Step Instructions
+1. Configure Swap Space on the First Node
+Create a Swap File:
+
+bash
+Copy code
+sudo fallocate -l 2G /swapfile
+Set the Correct Permissions:
+
+bash
+Copy code
+sudo chmod 600 /swapfile
+Set Up the Swap Area:
+
+bash
+Copy code
+sudo mkswap /swapfile
+Enable the Swap File:
+
+bash
+Copy code
+sudo swapon /swapfile
+Make the Swap File Permanent:
+
+Add the following line to /etc/fstab:
+
+bash
+Copy code
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+Ensure all nodes have the following content in their cassandra-rackdc.properties file:
+
+plaintext
+Copy code
+dc=datacenter1
+rack=rack1
+
+=================================================================END=========================================================================================
+====================================================================================================================================
+==========================================================================================================================================
+----java-------
+wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u282b08.tar.gz
+
+java --version
+
+sudo tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u282b08.tar.gz -C /usr/local/ --------extract-----
+
+
+---------------------------installing java 8------------------
+0.1) sudo nano /etc/apt/sources.list.d/corretto.list
+
+Add Repository Line:
+
+0.2) Inside the file, add the following line to specify the Corretto repository:
+   deb https://apt.corretto.aws stable main
+
+1.sudo apt update
+
+2.sudo apt install gnupg
+
+wget -qO - https://apt.corretto.aws/corretto.key | sudo apt-key add -
+
+sudo apt update
+
+sudo apt -y install java-1.8.0-amazon-corretto-jdk
+
+java -version
+
+
+vi ~/.bashrc
+-------Add these below lines------------
+#export JAVA_HOME=/usr/local/jdk8u282-b08
+#export JRE_HOME=$JAVA_HOME/jre
+#export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+
+echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto' >> ~/.bashrc
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+java -version
+========================JAVA instalation another way========================================================================================
+3. Add the GPG Key Using curl and gpg:  curl -L https://apt.corretto.aws/corretto.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/corretto-archive-keyring.gpg
+
+4.Add the Repository:  echo 'deb https://apt.corretto.aws stable main' | sudo tee /etc/apt/sources.list.d/corretto.list
+
+5. sudo apt update
+
+6.sudo apt install -y java-1.8.0-amazon-corretto-jdk
+
+7.java -version
+
+8.echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto' >> ~/.bashrc
+9.echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
+10.source ~/.bashrc
+===========================================================================================================================================
+=====================================Cassandraa=======================================================================
+
+Add the Apache Cassandra repository keys:
+
+11.------------ curl -o /etc/apt/keyrings/apache-cassandra.asc https://downloads.apache.org/cassandra/KEYS
+
+Add the Apache repository of Cassandra to /etc/apt/sources.list.d/cassandra.sources.list, for example for the latest 4.1
+
+12.------------ echo "deb [signed-by=/etc/apt/keyrings/apache-cassandra.asc] https://debian.cassandra.apache.org 41x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+
+13.sudo apt-get update
+
+14. sudo apt-get install cassandra
+
+15.sudo service cassandra start
+16.sudo service cassandra status
+====================================END======================================================================================================
+
+wget https://archive.apache.org/dist/cassandra/3.11.3/apache-cassandra-3.11.3-bin.tar.gz -------To install cassandra--------
+tar -xv -f apache-cassandra-3.11.3-bin.tar.gz -------to Extract the downloaded file----------
+
+
+We will need to modify 2 files :
+
+cassandra.yaml
+cassandra-rackdc.properties
+Those two files are located in the conf directory :
+
+cd apache-cassandra-3.11.3/conf/
+a. Modify the cassandra.yaml file :
+
+Open the file : vi cassandra.yaml
+
+Change the following fields :
+
+cluster_name : give the name you want (e.g Cluster1)
+listen_address : Give it a private IP address specific to this node
+rpc_address : Give it again this private IP address specific to this node
+seed_provider : A private IP address common to all instances
+endpoint_snitch : Set it to SimpleSnitch
+
+-------------
+ Modify the cassandra-rackdc.properties file :
+
+We will consider the simplest framework here: we won’t specify any rack name or data center name. Just comment on the two lines that are not commented 
+-----------------------------
+
+Add Cassandra Bin Directory to PATH: export PATH=$PATH:~/apache-cassandra-4.1.5/bin
+------------------------------
+
+Setting Up Cassandra as a Service (Optional):
+If you want to manage Cassandra as a service using systemd, you'll need to create a service unit file (cassandra.service). Here’s a basic example:
+
+[Unit]
+Description=Apache Cassandra Database
+After=network.target
+
+[Service]
+User=cassandra-user
+Group=cassandra-group
+ExecStart=/path/to/cassandra/bin/cassandra -f
+WorkingDirectory=/path/to/cassandra
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+
